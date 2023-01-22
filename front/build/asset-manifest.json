@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.5cc12d55.css",
+    "main.js": "/static/js/main.d7739279.js",
+    "static/js/787.075c86b7.chunk.js": "/static/js/787.075c86b7.chunk.js",
+    "static/media/Title.png": "/static/media/Title.027aba4c5254f6c2840c.png",
+    "static/media/NewGame.png": "/static/media/NewGame.1ad23c9711d52a9fa9cd.png",
+    "index.html": "/index.html",
+    "main.5cc12d55.css.map": "/static/css/main.5cc12d55.css.map",
+    "main.d7739279.js.map": "/static/js/main.d7739279.js.map",
+    "787.075c86b7.chunk.js.map": "/static/js/787.075c86b7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5cc12d55.css",
+    "static/js/main.d7739279.js"
+  ]
+}

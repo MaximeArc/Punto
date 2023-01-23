@@ -9,6 +9,14 @@ export const App = () => {
 
     const [showInput, setShowInput] = useState(false);
 
+    const fetchData = async () => {
+        const res = await fetch(`http://localhost:8080/api/users/`);
+        const json = await res.json();
+        console.log('json',json)
+    };
+
+    fetchData()
+
     const Card = ({value, color}) => {
         return (
             <div

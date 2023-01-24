@@ -1,21 +1,58 @@
 import "./App.css";
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import Grid from "./Components/Grid";
 import Title from "./Title.png";
 import NewGame from "./NewGame.png";
+import Images from "./utils/images"
 
 
 export const App = () => {
 
-    const [showInput, setShowInput] = useState(false);
+
+    const [cards, setCard] = useState([])
+    const [images, setImages] = useState([])
+
+    useEffect(() => {
+        fetchData();
+    }, [])
 
     const fetchData = async () => {
-        const res = await fetch(`http://localhost:8080/api/users/`);
+        const res = await fetch(`http://localhost:8080/api/cards/`);
         const json = await res.json();
-        console.log('json',json)
+        setCard(json)
     };
 
-    fetchData()
+
+    const setImageCards = () => {
+        if (cards.length > 0) {
+            const newArray = cards.map((c) => {
+                let imageObject = Images.filter((i) => i.id === c.value)
+                if (imageObject) {
+                    return {
+                        ...c, image: imageObject[0].imagePath
+                    }
+                }
+            })
+            setImages(newArray)
+        }
+    }
+
+    console.log('imgCard', images)
+
+  /*  const setCardsColor = () => {
+        if (images.length > 0) {
+            const newArray = images.map((c) => {
+                let color = Images.filter((i) => i.id === c.value)
+                if (color) {
+                    return {
+                        ...c, image: imageObject[0].imagePath
+                    }
+                }
+            })
+            setImages(newArray)
+        }
+    }*/
+
 
     const Card = ({value, color}) => {
         return (
@@ -29,22 +66,8 @@ export const App = () => {
         );
     };
 
-    const CardList = ({color}) => {
-        const values = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-        return (
-            <div className="card-list">
-                {values.map(value => (
-                    <Card key={value} value={value} color={color}/>
-                ))}
-            </div>
-        );
-    };
 
 
-    const onNewGameClick = () => {
-        setShowInput(true)
-    }
 
     return (
 
@@ -52,20 +75,17 @@ export const App = () => {
             <img src={Title} className="title"/>
             <div>
                 <button className="newgame-button">
-                    <img src={NewGame} className="newgame-img" onClick={onNewGameClick}/>
+                    <img src={NewGame} className="newgame-img" onClick={setImageCards}/>
                 </button>
-                {showInput && (
-                    <div style={{position: 'absolute', bottom: '40px', right: '40px'}}>
-                        <input type="text" placeholder="Enter text here"/>
-                    </div>)}
+
             </div>
 
-            <Grid/>
-
-            {/*         <div>
-                <CardList color="red" />
-                <CardList color="blue" />
-            </div>*/}
+            <Grid className="grid-container"/>
+                   <div>
+                {images.map((c) => (
+                    <img key={c._id} src={c.image} className={`card${c.color}`}/>
+                ))}
+                   </div>
 
         </div>
     );

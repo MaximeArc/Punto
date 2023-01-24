@@ -3,7 +3,7 @@ const User = db.users
 
 exports.create = (req, res) => {
     if (!req.body.name || !req.body.password) {
-        res.status(400).send({ message: "Content can not be empty!" });
+        res.status(400).send({ message: "Name and Password are required" });
         return;
     }
 

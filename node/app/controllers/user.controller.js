@@ -1,15 +1,18 @@
 const db = require("../models");
 const User = db.users
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 exports.create = (req, res) => {
-    if (!req.body.name || !req.body.password) {
-        res.status(400).send({ message: "Name and Password are required" });
+    if (!req.body.email|| !req.body.password || !req.body.name) {
+        res.status(400).send({ message: "Mail and Password are required" });
         return;
     }
 
     const user = new User({
         name: req.body.name,
-        password: req.body.password,
+        email: req.body.email,
+        password: bcrypt.hashSync(req.body.password, 10),
     });
 
     user
@@ -56,6 +59,54 @@ exports.findOne = (req, res) => {
                 .send({ message: "Error retrieving User with id=" + id });
         });
 };
+
+exports.findOneByEmail = (req, res) => {
+
+    const user = new User({
+        email: req.body.user.email,
+        password: req.body.user.password,
+    });
+
+    User.findOne({ email: user.email })
+        .then(data => {
+            if (!data)
+                res.status(404).send({ message: "Not found User with email " + user.email });
+
+            const passwordIsValid = bcrypt.compareSync(
+                user.password,
+                data.password
+            );
+            console.log(user.password,data.password)
+            console.log('passwordIsValid: ', passwordIsValid)
+
+            if (!passwordIsValid) {
+                return res.status(401).send({
+                    accessToken: null,
+                    message: "Invalid Password!"
+                });
+            }
+
+            const token = jwt.sign({ userId: data._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+            console.log('token: ', token)
+
+            res.status(200).send({
+                id:data._id,
+                name: data.name,
+                email: data.email,
+                played: data.played,
+                victory: data.victory,
+                accessToken: token
+            });
+        })
+            /*else if(data.password === user.password) res.send(data);
+            else res.status(404).send({ message: "Wrong password" });
+        })*/
+        .catch(err => {
+            res.status(500).send({ message: "Error retrieving User with email=" + user.email });
+        });
+};
+
 
 exports.update = (req, res) => {
     if (!req.body) {

@@ -15,5 +15,7 @@ module.exports = app => {
 
     router.delete("/", users.deleteAll);
 
+    router.post("/mail", users.findOneByEmail);
+
     app.use('/api/users', router);
 };

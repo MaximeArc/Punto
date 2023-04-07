@@ -3,8 +3,8 @@ module.exports = mongoose => {
       "card",
       mongoose.Schema(
         {
-          value: Number,
-          color: String,
+          value: {type:Number, required:true},
+          color: {type:String, required: true},
         },
         { timestamps: false }
       )

@@ -11,9 +11,7 @@ module.exports = app => {
 
     router.get("/:id", games.findOne);
 
-/*
-    router.put("/:id", games.update);
-*/
+    //router.put("/:id", games.update);
 
 /*
     router.delete("/:id", games.delete);

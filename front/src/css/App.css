@@ -27,7 +27,7 @@
 .body{
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
@@ -53,6 +53,12 @@
   position: relative;
 } */
 
+.hand {
+  display: flex;
+  flex-direction: row;
+  flex: 0.3;
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: repeat(11, 1fr);
@@ -62,7 +68,6 @@
   height: 50%;
   justify-content:center;
   align-content:center;
-  flex: 1;
 }
 
 .grid-row {
@@ -85,19 +90,19 @@
 }
 
 .cardBlue {
-  width: 10%;
+  width: 30%;
   background-color: #6699CC;
 }
 .cardRed {
-  width: 10%;
+  width: 30%;
   background-color: #E52B50;
 }
 .cardGreen {
-  width: 10%;
+  width: 30%;
   background-color: #00FF40;
 }
 .cardYellow {
-  width: 10%;
+  width: 30%;
   background-color:#EED202;
 }
 
@@ -136,33 +141,6 @@
 
 .newgame-img{
     width: 100%;
-}
-
-#hand1{
-  position: absolute;
-  bottom: 50%;
-  left: 5%;
-}
-
-#hand2{
-  position: absolute;
-  bottom: 50%;
-  right: 5%;
-  width: 10%;
-}
-
-#hand3{
-  position: absolute;
-  top: 70%;
-  left: 5%;
-  width: 10%;
-}
-
-#hand4{
-  position: absolute;
-  top: 70%;
-  right: 5%;
-  width: 10%;
 }
 
 .nav {
@@ -247,7 +225,6 @@
 
 .form__input {
   padding: 10px 15px;
-  border: none;
   border-radius: 5px;
   margin-bottom: 20px;
   font-size: 16px;

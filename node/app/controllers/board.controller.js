@@ -37,7 +37,7 @@ exports.findOne = (req, res) => {
 };
 
 exports.findOriginal = (req, res) => {
-    const id = "63d3d9fbbc5e22a9a847f160";
+    const id = "6432e1507638ff9c1bc336b6";
 
     Board.findById(id)
         .then(data => {

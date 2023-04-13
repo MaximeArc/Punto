@@ -26,9 +26,11 @@ export const Profile = ({user}) => {
         boxShadow: 24,
         p: 4,
         backgroundColor: '#282c34',
-        color: 'antiquewhite'
+        color: 'white'
     };
 
+    const victoryPercentage = (user?.victory / user?.played * 100 || 0).toFixed(1);
+    const [integerPart, decimalPart] = victoryPercentage.split('.');
 
     return (
         <Modal
@@ -40,10 +42,10 @@ export const Profile = ({user}) => {
         >
             <Fade in={isOpen}>
                 <Box sx={style}>
-                    <Typography variant="h4">{user.name}</Typography>
-                    <Typography variant="h5">{`Games played : ${user.played}`}</Typography>
-                    <Typography variant="h5">{`Games won : ${user.victory}`}</Typography>
-                    <Typography variant="h5">{`Victory percentage : ${user.victory/user.played*100 || 0} %`}</Typography>
+                    <Typography variant="h4" style={{marginBottom:'20px'}}>{user?.name}</Typography>
+                    <Typography variant="h5">{`Games played : ${user?.played}`}</Typography>
+                    <Typography variant="h5">{`Games won : ${user?.victory}`}</Typography>
+                    <Typography variant="h5">{`Victory percentage : ${integerPart} %`}</Typography>
                 </Box>
             </Fade>
         </Modal>

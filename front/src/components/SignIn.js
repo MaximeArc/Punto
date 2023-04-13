@@ -1,8 +1,7 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {api} from "../api/api";
 
 export const SignIn = ({setIsOpen, setUser}) => {
-
 
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
@@ -13,16 +12,21 @@ export const SignIn = ({setIsOpen, setUser}) => {
         const response = await api.users.getByEmail(user)
         try {
             const user = response.data;
+            localStorage.setItem("user", user.id)
             await setUser(user);
-            setIsOpen(false);
-        }
+            setIsOpen(false);}
         catch (error) {
             console.log(error);
         }
     }
 
+    const style = {
+        backgroundColor:'#282c34',
+        color:'white',
+    };
+
     return(
-        <div className="form">
+        <div className="form" style={style}>
             <h2 className="form__title">Login</h2>
             <form>
                 <input
@@ -32,6 +36,7 @@ export const SignIn = ({setIsOpen, setUser}) => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    style={{color:'white', backgroundColor:'#282c34'}}
                 />
                 <input
                     className="form__input"
@@ -40,10 +45,18 @@ export const SignIn = ({setIsOpen, setUser}) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    style={{color:'white', backgroundColor:'#282c34'}}
                 />
-                <button
-                    className="form__button"
-                    onClick={handleLogin}>Login</button>
+                <div style={{textAlign: "center"}}>
+                    <button
+                        className="form__button"
+                        onClick={handleLogin}
+
+                    >
+                        Login
+                    </button>
+                </div>
+
             </form>
         </div>
     )

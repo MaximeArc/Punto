@@ -76,8 +76,6 @@ exports.findOneByEmail = (req, res) => {
                 user.password,
                 data.password
             );
-            console.log(user.password,data.password)
-            console.log('passwordIsValid: ', passwordIsValid)
 
             if (!passwordIsValid) {
                 return res.status(401).send({
@@ -87,8 +85,6 @@ exports.findOneByEmail = (req, res) => {
             }
 
             const token = jwt.sign({ userId: data._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-            console.log('token: ', token)
 
             res.status(200).send({
                 id:data._id,

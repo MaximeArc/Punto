@@ -10,10 +10,6 @@ services:
     volumes:
       - data:/data/db
 
-    #environment:
-     # MONGO_INITDB_ROOT_USERNAME: "max"
-      #MONGO_INITDB_ROOT_PASSWORD: "mvmmvm"
-
   backend:
     build: ./node
     ports:

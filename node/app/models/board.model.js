@@ -1,14 +1,16 @@
 module.exports = mongoose => {
-    const Board = mongoose.model(
+    return mongoose.model(
         "board",
         mongoose.Schema(
             {
-                grid:{type:Array, default:Array(11)
+                grid: {
+                    type: Array,
+                    default: Array(11)
                         .fill(null)
-                        .map(() => Array(11).fill(null))}
+                        .map(() => Array(11).fill(null))
+                }
             },
-            { timestamps: false }
+            {timestamps: false}
         )
     );
-    return Board;
 };

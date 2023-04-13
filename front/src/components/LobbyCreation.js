@@ -7,7 +7,7 @@ import {Link, useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import rules from "../assets/images/rules.png";
 
-export const LobbyCreation = ({socket}) => {
+export const LobbyCreation = ({socket, user}) => {
 
     const [colorPicker, setColorPicker] = useState(["Blue", "Red", "Green", "Yellow"]);
     const [isOpen, setIsOpen] = useState(true);
@@ -29,28 +29,31 @@ export const LobbyCreation = ({socket}) => {
         boxShadow: 24,
         p: 4,
         backgroundColor: '#282c34',
-        color: 'antiquewhite'
+        justifyContent: 'center',
+        alignItems: 'center',
+        display: 'flex',
+        color: 'white'
     };
 
     socket.once('roomId',  (roomId) => {
-        console.log('roomId', roomId)
         const remainingColors = colorPicker.filter((c) => c !== color);
         if(color!==''){
-            socket.emit('join', roomId, color, remainingColors);
+            socket.emit('join', roomId, color, remainingColors, user);
             setRoomId(roomId);
         }
 
     })
 
-    useEffect (() => {
+   /* useEffect (() => {
         if(roomId!=='') {
             history(`/room/${roomId}`);
         }
-    },[roomId])
+    },[roomId])*/
 
-    const handleCreate = (e) => {
+    const handleCreate = async (e) => {
         e.preventDefault();
-        socket.emit('createRoom', roomName, Number(number));
+        await socket.emit('createRoom', roomName, Number(number));
+        setIsOpen(false);
     }
 
 
@@ -83,43 +86,55 @@ export const LobbyCreation = ({socket}) => {
             <Fade in={isOpen}>
                 <Box sx={style}>
                     <FormControl>
-                        <RadioGroup
-                            row
-                            aria-labelledby="demo-row-radio-buttons-group-label"
-                            name="row-radio-buttons-group"
-                            value={number}
-                            onChange={handleChange}
-                        >
-                            <FormControlLabel value="2" control={<Radio />} label="2" />
-                            <FormControlLabel value="3" control={<Radio />} label="3" />
-                            <FormControlLabel value="4" control={<Radio />} label="4" />
-                        </RadioGroup>
-                        <Typography variant="h5"/>{"Room's name"}
-                        <TextField id="standard-basic" variant="standard" onChange={handleNameChange} />
-                        <FormControl fullWidth>
-                        <InputLabel id="select-color">Color</InputLabel>
-                        <Select
-                            labelId="color"
-                            id="color"
-                            value={color}
-                            label="Color"
-                            onChange={handleChangeColor}
-                        >
-                            {colorPicker.length>0 &&
-                                colorPicker.map((c,idx) => {
-                                return (
-                                    <MenuItem key={idx} value={c}>{c}</MenuItem>
-                                )
-                                })}
-                        </Select>
-                        </FormControl>
-                        <Chip
-                            label="Create"
-                            component={Link}
-                            clickable
-                            onClick={handleCreate}
-                            color="success"
-                        />
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexDirection:'inherit' }}>
+                                <Typography variant="h6" sx={{ marginRight: '1rem' }}>Number of Players</Typography>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="row-radio-buttons-group"
+                                    value={number}
+                                    onChange={handleChange}
+                                >
+                                    <FormControlLabel value="2" control={<Radio sx={{ color: 'white' }} />} label="2" />
+                                    <FormControlLabel value="3" control={<Radio sx={{ color: 'white' }} />} label="3" />
+                                    <FormControlLabel value="4" control={<Radio sx={{ color: 'white' }} />} label="4" />
+                                </RadioGroup>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' , flexDirection:'inherit'}}>
+                                <Typography variant="h6" sx={{ marginRight: '1rem' }}>Room's Name</Typography>
+                                <TextField  variant="standard" onChange={handleNameChange} inputProps={{ style: { color: 'white' } }}/>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', width:'100%' }}>
+                                <FormControl fullWidth sx={{backgroundColor: '#282c34'  }}>
+                                    <InputLabel id="select-color" sx={{ color: 'white' }}>Color</InputLabel>
+                                    <Select
+                                        labelId="color"
+                                        id="color"
+                                        value={color}
+                                        label="Color"
+                                        onChange={handleChangeColor}
+                                        sx={{ color: 'white', backgroundColor: '#282c34' }}
+                                    >
+                                        {colorPicker.length > 0 &&
+                                            colorPicker.map((c,idx) => {
+                                                return (
+                                                    <MenuItem key={idx} value={c}>{c}</MenuItem>
+                                                )
+                                            })
+                                        }
+                                    </Select>
+                                </FormControl>
+                            </div>
+                            <Chip
+                                label="Create"
+                                component={Link}
+                                clickable
+                                onClick={handleCreate}
+                                color="success"
+                                sx={{ marginTop: '1rem', width: '100%'}}
+                            />
+                        </div>
                     </FormControl>
                 </Box>
             </Fade>

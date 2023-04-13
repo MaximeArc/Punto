@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import axios from "axios";
 import {api} from "../api/api";
 
-export const SignUp = () => {
+export const SignUp = ({setValue}) => {
 
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
@@ -13,28 +13,17 @@ export const SignUp = () => {
         e.preventDefault()
         try {
             await api.users.post(name, email, password);
+            setValue(0)
         } catch (error) {
             console.log(error);
         }
     }
 
+    const style = {
+        backgroundColor:'#282c34',
+        color:'white',
+    };
 
-   /* const handleRegister = async () => {
-        console.log({username, email, password})
-        try {
-            await fetch('http://localhost:8080/api/users/',{
-                method : 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                    "Access-Control-Allow-Origin": "*",
-                },
-                body: JSON.stringify({username, email, password})
-                });
-        } catch (error) {
-            console.log(error);
-        }
-    }*/
     const handleUsername = (value) => {
         setName(value);
     }
@@ -49,7 +38,7 @@ export const SignUp = () => {
 
 
     return (
-        <div className="form">
+        <div className="form" style={style}>
             <h2 className="form__title">Register</h2>
             <form onSubmit={(e) => handleRegister(e)}>
                 <input
@@ -59,6 +48,7 @@ export const SignUp = () => {
                     value={name}
                     onChange={(e) => handleUsername(e.target.value)}
                     required
+                    style={{color:'white', backgroundColor:'#282c34'}}
                 />
                 <input
                     className="form__input"
@@ -67,6 +57,7 @@ export const SignUp = () => {
                     value={email}
                     onChange={(e) => handleEmail(e.target.value)}
                     required
+                    style={{color:'white', backgroundColor:'#282c34'}}
                 />
                 <input
                     className="form__input"
@@ -76,8 +67,11 @@ export const SignUp = () => {
                     onChange={(e) =>
                         handlePassword(e.target.value)}
                     required
+                    style={{color:'white', backgroundColor:'#282c34'}}
                 />
+                <div style={{textAlign: "center"}}>
                 <button className="form__button" type="submit">Register</button>
+                </div>
             </form>
         </div>
     )

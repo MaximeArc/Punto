@@ -1,4 +1,3 @@
-const cards = require("../controllers/card.controller");
 module.exports = app => {
     const boards = require("../controllers/board.controller.js");
 

@@ -4,6 +4,8 @@ module.exports = app => {
     const router = require("express").Router();
 
     router.post("/", cards.create);
+
+    router.post("/insertArray/", cards.insertMany);
   
     router.get("/", cards.findAll);
   

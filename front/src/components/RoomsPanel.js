@@ -2,7 +2,7 @@ import {Box, Chip, Fade, FormControl, InputLabel, MenuItem, Modal, Select, Typog
 import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 
-export const RoomsPanel = ({socket}) => {
+export const RoomsPanel = ({socket, user}) => {
 
     const [isOpen, setIsOpen] = useState(true);
     const [rooms, setRooms] = useState([]);
@@ -18,7 +18,7 @@ export const RoomsPanel = ({socket}) => {
 
     const handleJoin = (room) => {
         const remainingColors = room.remainingColors.filter((c) => c !== color);
-        socket.emit('join', room.id, color, remainingColors);
+        socket.emit('join', room.id, color, remainingColors, user);
         localStorage.setItem("room", room.id)
         setIsOpen(false);
     };
@@ -50,7 +50,15 @@ export const RoomsPanel = ({socket}) => {
         boxShadow: 24,
         p: 4,
         backgroundColor: '#282c34',
-        color: 'antiquewhite'
+        color: 'white',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '16px',
+        '& > *': {
+            width: '100%',
+        },
     };
 
     return (
@@ -64,19 +72,32 @@ export const RoomsPanel = ({socket}) => {
             <Fade in={isOpen}>
                 <Box sx={style}>
                     {rooms.length>0 && rooms.map((room) => (
+                        <div key={room.id}>
+                        <div style={{justifyContent:'space-between',display:'flex', marginBottom:'10px'}} >
                         <Typography
                             sx={{ display: 'flex', justifyContent: 'space-between' }}
                             variant="h5"
-                            key={room.id}>
-                            {`${room.name}  ${room.number} players `}
-                            <FormControl fullWidth>
+                            >
+                            {`${room.name}`}
+                        </Typography>
+                        <Typography
+                            sx={{ display: 'flex', justifyContent: 'space-between' }}
+                            variant="h5"
+                            >
+                            {`${room.players?.length} / ${room.number}`}
+                        </Typography>
+                        </div>
+
+                        <FormControl fullWidth sx={{marginBottom:'10px'}}>
                             <InputLabel id="select-color">Color</InputLabel>
                             <Select
                                 labelId="color"
                                 id="color"
                                 value={color}
                                 label="Color"
+                                sx={{color: 'white'}}
                                 onChange={handleChangeColor}
+                                disabled={room.players?.length >= room.number}
                             >
                                 {room.remainingColors?.map((c,i) => {
                                  return (
@@ -89,18 +110,20 @@ export const RoomsPanel = ({socket}) => {
                                 <Chip
                                 label={"Join"}
                                 component={Link}
-                                to={`/room/${room.id}`}
+                                //to={`/room/${room.id}`}
                                 clickable
                                 onClick={() => handleJoin(room)}
                                 color={"success"}
+                                sx={{width: '100%'}}
                                 />
                                 :
                                 <Chip
                                 label={"Full"}
                                 color={"error"}
+                                sx={{width: '100%'}}
                                 />
                             }
-                    </Typography>
+                            </div>
                     ))}
                 </Box>
             </Fade>

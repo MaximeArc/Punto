@@ -1,29 +1,33 @@
 const db = require("../models");
 const Game = db.games
+const Board = db.boards
+const Hand = db.hands
 
-exports.create = (req, res) => {
 
+exports.create = async (req, res) => {
+
+    const board = new Board({
+        grid: req.body.board.grid,
+    })
+    const savedBoard = await board.save();
+
+    const hands = req.body.hands.map(hand => {
+        return new Hand({
+            hand: hand.hand,
+            user: hand.user
+        })
+    })
+
+    const savedHands = await hands.map(hand => {
+        return hand.save()
+    })
 
     const game = new Game({
-        board: req.body.board,
-        data1: {
-            user: req.body.data1.user,
-            hand: req.body.data1.hand
-        },
-        data2: {
-            user: req.body.data2.user,
-            hand: req.body.data2.hand
-        },
-        data3: {
-            user: req.body.user,
-            hand: req.body.hand
-        },
-        data4: {
-            user: req.body.user,
-            hand: req.body.hand
-        },
-        turn: req.body.turn
-
+        board: savedBoard._id,
+        users: req.body.users.map(user => user._id),
+        hands: savedHands.map(hand => hand._id),
+        turn: req.body.turn,
+        score: req.body.score
     });
 
     game
@@ -34,7 +38,7 @@ exports.create = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the Card."
+                    err.message || "Some error occurred while creating the Game."
             });
         });
 };
@@ -57,9 +61,11 @@ exports.findAll = (req, res) => {
 
 
 exports.findOne = (req, res) => {
-    const id = req.params.id;
+    const id = req.params.userId;
 
-    Game.findById(id)
+    Game.find({
+        users: { $in: [id] }
+    })
         .then(data => {
             if (!data)
                 res.status(404).send({ message: "Not found Game with id " + id });

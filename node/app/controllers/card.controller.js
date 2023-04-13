@@ -25,6 +25,25 @@ exports.create = (req, res) => {
       });
   };
 
+exports.insertMany = (req, res) => {
+    const cards = req.body.map(card => ({
+        value: card.value,
+        color: card.color,
+    }));
+
+    Card.insertMany(cards)
+        .then(data => {
+            res.send({ message: `${data.length} cards inserted` });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while creating the Cards."
+            });
+        });
+};
+
+
 exports.findAll = (req, res) => {
     const value = req.query.value;
     var condition = value ? { value: { $regex: new RegExp(value), $options: "i" } } : {};
@@ -56,7 +75,6 @@ exports.findOne = (req, res) => {
           .send({ message: "Error retrieving Card with id=" + id });
       });
   };
-
 exports.update = (req, res) => {
     if (!req.body) {
       return res.status(400).send({

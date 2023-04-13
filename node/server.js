@@ -6,7 +6,8 @@ const socketIO = require('socket.io');
 const db = require("./app/models");
 require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
-const {playGame} = require("./app/HandFunctions/HandDealing");
+const {playGame} = require("./app/handFunctions/HandDealing");
+const socket = require('./app/socket');
 
 
 const corsOptions = {
@@ -18,81 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const server = http.createServer(app);
-
-const io = socketIO(server,{
-    cors: {
-        origin: "http://localhost:3000",
-        methods: ["GET", "POST"]
-    }
-});
-
-const rooms = []
-io.on('connection', async (socket) => {
-
-    const emitRoomsList = () => {
-        io.emit('roomsList', rooms);
-    }
-
-    socket.on('getRooms', () => {
-        emitRoomsList();
-    });
-
-    socket.on('createRoom', (roomName, roomNumber) => {
-        const roomId = uuidv4();
-        const room = {
-            id: roomId,
-            name: roomName,
-            number:roomNumber,
-            players: [],
-            remainingColors: ["Blue", "Red", "Green", "Yellow"],
-        }
-        rooms.push(room);
-        if(!!roomId){
-            socket.emit('roomId', roomId);
-        }
-        //emitRoomsList();
-    });
-
-    socket.once('join', (roomId, color, remainingColors) => {
-        //const room = io.sockets.adapter.rooms.get(roomId);
-        const room = rooms.find(r => r.id === roomId);
-        console.log('room', room)
-        if (room) {
-            socket.join(roomId);
-            const roomIndex = rooms.findIndex((r) => r.id === roomId);
-            rooms[roomIndex].remainingColors = remainingColors;
-            const playerIndex = rooms[roomIndex].players.findIndex((p) => p.id === socket.id);
-            if (playerIndex === -1) {
-                let hand = []
-                socket.on('cards', (cards) => {
-                    hand = playGame(cards, room.number, color);
-                    socket.emit('hand', hand)
-                })
-                const player = {
-                    id: socket.id,
-                    color: color,
-                    name: 'Player 2',
-                    hand: hand
-                }
-                console.log('player', player)
-                rooms[roomIndex].players.push(player);
-            }
-            socket.emit('fetchCards')
-            socket.on('cards', async (cards) => {
-                const hand = await playGame(cards, room.number,);
-                await console.log('hand', hand)
-                socket.emit('hand', hand)
-            })
-            io.to(roomId).emit('initialState');
-        } else {
-            socket.emit('error', 'Room does not exist');
-        }
-        socket.on('move', (grid) => {
-            const newGrid = [...grid];
-            io.to(roomId).emit('gameState', newGrid);
-        })
-    });
-});
+socket(server);
 
 
 const PORT = process.env.PORT || 8080;

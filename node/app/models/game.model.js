@@ -1,31 +1,49 @@
 module.exports = mongoose => {
-    const Game = mongoose.model(
+    return mongoose.model(
         "game",
         mongoose.Schema(
             {
-                board:{type:mongoose.model('board').schema, required:true},
-                data1:{
-                    user: {type:mongoose.model('user').schema, required:true},
-                    hand: {type:mongoose.model('hand').schema, required:true}
+                board: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'board',
+                    required: true,
+                    default: []
                 },
-                data2:{
-                    user: {type:mongoose.model('user').schema, required:true},
-                    hand: {type:mongoose.model('hand').schema, required:true}
+                users: [{
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'user'
+                }],
+                hands: [[{
+                    user: {
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: 'user',
+                    },
+                    hand: {
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: 'hand'
+                    }
+                }]],
+                turn: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'user',
+                    required: true
                 },
-                data3:{
-                    user: {type:mongoose.model('user').schema},
-                    hand: {type:mongoose.model('hand').schema}
-                },
-                data4:{
-                    user: {type:mongoose.model('user').schema},
-                    hand: {type:mongoose.model('hand').schema}
-                },
-                turn: {type:mongoose.model('user').schema,required:true}
-
+                score: [
+                    {
+                        user: {
+                            type: mongoose.Schema.Types.ObjectId,
+                            ref: 'user',
+                            required: true
+                        },
+                        value: {
+                            type: Number,
+                            required: true,
+                            default: 0
+                        }
+                    }
+                ]
             },
-            { timestamps: true }
+            {timestamps: true}
         )
     );
-
-    return Game;
 };

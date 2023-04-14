@@ -3,8 +3,6 @@ import "../css/App.css";
 
 
 const Card = ({x,y,card}) => {
-
-
     return (
         <img
             key={`${x}-${y}`}
@@ -16,6 +14,4 @@ const Card = ({x,y,card}) => {
         </img>
     )
 };
-
-
 export default Card;

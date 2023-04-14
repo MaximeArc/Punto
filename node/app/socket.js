@@ -5,7 +5,7 @@ const axios = require('axios');
 
 const rooms = []
 
-module.exports = function(server) {
+module.exports = (server) => {
     const io = socketIO(server,{
         cors: {
             origin: "http://localhost:3000",

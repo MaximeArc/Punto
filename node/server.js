@@ -29,11 +29,6 @@ server.listen(PORT, () => {
 
 db.mongoose
   .connect(db.url, {
- /*   auth: {
-      username: "max",
-      password: "mvmmvm",
-    },
-    authSource: "admin",*/
     useNewUrlParser: true,
     useUnifiedTopology: true
   })

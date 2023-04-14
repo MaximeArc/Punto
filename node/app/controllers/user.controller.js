@@ -8,7 +8,6 @@ exports.create = (req, res) => {
         res.status(400).send({ message: "Mail and Password are required" });
         return;
     }
-
     const user = new User({
         name: req.body.name,
         email: req.body.email,

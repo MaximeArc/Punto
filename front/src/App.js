@@ -104,7 +104,6 @@ export const App = () => {
 
     return (
         <Router>
-
             {!loggedIn && <Navigate to="/login"/>}
             <Navbar/>
             <div style={{ flexGrow: 1 , textAlign:'center', backgroundColor: '#282c34',
@@ -134,7 +133,6 @@ export const App = () => {
                 <Route path="/join" element={<RoomsPanel socket={socket} user={user}/>}/>
                 <Route path="/login" element={<Login setUser={setUser}/>}/>
                 <Route path="/load" element={<LoadPanel socket={socket} user={user}/>}/>
-
             </Routes>
         </Router>
 

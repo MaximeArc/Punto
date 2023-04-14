@@ -7,7 +7,6 @@ const Login = ({setUser}) => {
 
     const [value, setValue] = useState(0);
     const [isOpen, setIsOpen] = useState(true);
-
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };

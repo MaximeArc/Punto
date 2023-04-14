@@ -11,8 +11,6 @@ const Message = ({ roundWon, gameWon }) => {
                 {gameWon} won the game !
             </Typography>}
         </>
-
     );
 }
-
 export default Message;

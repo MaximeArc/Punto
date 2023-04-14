@@ -8,5 +8,4 @@ const Turn = ({ turn }) => {
         </Typography>
     );
 }
-
 export default Turn;
